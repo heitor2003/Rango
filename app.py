@@ -17,9 +17,9 @@ def index():
     print(restaurantes)
     return render_template('index.html', restaurantes=restaurantes)
 
-@app.route('/cadastro')
+@app.route('/cadastro-usuario')
 def login():
-    return render_template('cadastro.html')
+    return render_template('cadastro_usuario.html')
 
 @app.route('/pesquisa', methods=['GET', 'POST'])
 def pesquisa():
