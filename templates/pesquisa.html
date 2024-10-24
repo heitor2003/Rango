@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Pesquisa de Restaurantes</title>
+</head>
+<body>
+    <h1>Pesquisar Restaurantes</h1>
+    <form method="POST">
+        Nome do Restaurante: <input type="text" name="nome"><br>
+        Tipo de Cozinha: 
+        <select name="tipo_cozinha">
+            <option value="">Selecione</option>
+            <option value="Italian">Italiana</option>
+            <option value="American">Americana</option>
+            <option value="Bakery">Padaria</option>
+            <option value="Chinese">Chinesa</option>
+            <!-- Adicione mais tipos de cozinha aqui -->
+        </select><br>
+        Latitude: <input type="text" name="latitude"><br>
+        Longitude: <input type="text" name="longitude"><br>
+        <input type="submit" value="Buscar">
+    </form>
+
+    <h2>Resultados</h2>
+    <ul>
+        {% for restaurante in restaurantes %}
+            <li>
+                <strong>{{ restaurante['name'] }}</strong><br>
+                Tipo de Cozinha: {{ restaurante['cuisine'] }}<br>
+                Localização: {{ restaurante['address']['street'] }}, {{ restaurante['borough'] }}<br>
+                <hr>
+            </li>
+        {% endfor %}
+    </ul>
+</body>
+</html>

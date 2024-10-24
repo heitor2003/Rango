@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Reservar</title>
+</head>
+<body>
+    <h1>Reservar mesa em {{ restaurante['name'] }}</h1>
+    <form method="POST">
+        Nome: <input type="text" name="nome"><br>
+        Horário: <input type="time" name="horario"><br>
+        <input type="submit" value="Reservar">
+    </form>
+</body>
+</html>
