@@ -1,25 +1,65 @@
-from flask import Flask, render_template, request, redirect, url_for
+from flask import Flask, render_template, request, redirect, url_for, flash
 from pymongo import MongoClient
 from geopy.distance import geodesic
+import bcrypt
+from dotenv import load_dotenv
+import os
 
+load_dotenv()
 app = Flask(__name__)
+app.secret_key = os.getenv('FLASK_SECRET_KEY')
+conexao = os.getenv('CONNECTION')
 
 # Conectando ao MongoDB
-client = MongoClient("mongodb://localhost:27017/")
+client = MongoClient(conexao)
 db = client["RangoDB"]
 restaurantes_col = db["restaurantes"]
 reservas_col = db["reservas"]
-usuarios_col = db["usuarios"]
+usuarios_col = db["clientes"]
 
 @app.route('/')
 def index():
-    restaurantes = list(restaurantes_col.find())
-    print(restaurantes)
-    return render_template('index.html', restaurantes=restaurantes)
-
-@app.route('/cadastro-usuario')
-def login():
     return render_template('cadastro_usuario.html')
+
+
+@app.route('/login', methods=['GET, POST'])
+def login():
+    email = request.form['email']
+    senha = request.form['senha']
+
+    # Buscar o usuário pelo e-mail
+    usuario = usuarios_col.find_one({'email': email})
+    
+    if usuario and bcrypt.checkpw(senha.encode('utf-8'), usuario['senha']):
+        flash('Login realizado com sucesso!')
+        return redirect(url_for('index'))  # Redireciona para a página inicial ou outra página após login
+    else:
+        flash('E-mail ou senha incorretos. Tente novamente.')
+        return redirect(url_for('login'))
+
+@app.route('/cadastro-usuario', methods=['GET', 'POST'])
+def cadastro():
+    nome = request.form['nome']
+    telefone = request.form['telefone']
+    email = request.form['email']
+    senha = request.form['senha']
+
+    # Criptografando a senha
+    hashed_senha = bcrypt.hashpw(senha.encode('utf-8'), bcrypt.gensalt())
+
+    # Inserindo dados na coleção de usuários
+    usuario = {
+        'nome': nome,
+        'telefone': telefone,
+        'email': email,
+        'senha': hashed_senha
+    }
+
+    # Inserindo o usuário no MongoDB
+    usuarios_col.insert_one(usuario)
+    flash('Cadastro realizado com sucesso!')
+    return redirect(url_for('login'))
+
 
 @app.route('/pesquisa', methods=['GET', 'POST'])
 def pesquisa():
