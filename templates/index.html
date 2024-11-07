@@ -8,9 +8,10 @@
 </head>
 <body>
     <h1>Restaurantes Disponíveis</h1>
+    <a href="{{ url_for('cadastro_usuario') }}"><button>Cadastro</button></a>
     <ul>
         {% for restaurante in restaurantes %}
-        <li><a href="{{ url_for('reservar', restaurante_id=restaurante['restaurant_id']) }}">
+        <li><a href="{{ url_for('ver_restaurante', restaurante_id=restaurante['restaurant_id']) }}">
             {{ restaurante['name'] }}
         </a></li>
         {% endfor %}

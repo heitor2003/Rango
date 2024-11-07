@@ -13,13 +13,14 @@ conexao = os.getenv('CONNECTION')
 # Conectando ao MongoDB
 client = MongoClient(conexao)
 db = client["RangoDB"]
+
 restaurantes_col = db["restaurantes"]
 reservas_col = db["reservas"]
 usuarios_col = db["clientes"]
 
 @app.route('/')
 def index():
-    return render_template('index.html')
+    return render_template("index.html", restaurantes=restaurantes_col.find())
 
 
 @app.route('/login', methods=['GET, POST'])
@@ -38,7 +39,7 @@ def login():
         return redirect(url_for('login'))
 
 @app.route('/cadastro-usuario', methods=['GET', 'POST'])
-def cadastro():
+def cadastro_usuario():
     nome = request.form['nome']
     telefone = request.form['telefone']
     email = request.form['email']
@@ -107,7 +108,12 @@ def reservar(restaurante_id):
     # Exibir detalhes do restaurante
     restaurante = restaurantes_col.find_one({'restaurant_id': restaurante_id})
     return render_template('reservar.html', restaurante=restaurante)
- 
+
+@app.route('/restaurante/<restaurante_id>', methods=['GET', 'POST'])
+def ver_restaurante(restaurante_id):
+    restaurante = restaurantes_col.find_one({"restaurant_id": restaurante_id})
+    return render_template("ver_restaurante.html", restaurante=restaurante)
+
 @app.route('/confirmacao')
 def confirmacao():
     return "Reserva confirmada!"
