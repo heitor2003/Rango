@@ -39,10 +39,14 @@
     </div>
 
     <a href="{{ url_for('reservar', restaurante_id=restaurante['restaurant_id']) }}">
-        <button>Reservar</button>
+        <button type="button" class="btn btn-primary">Reservar</button>
+    </a>
+
+    <a href="{{ url_for('index')}}">
+        <button type="button" class="btn btn-primary">Início</button>
     </a>
     {% else %}
-        <p>Não foi possível recuperar os dados do restaurante</p>
+        <h1>Não foi possível recuperar os dados do restaurante</h1>
     {% endif %}
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
 </body>
