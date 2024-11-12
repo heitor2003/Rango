@@ -27,14 +27,14 @@
 
     <div id="map">
         <script>
-            var coord = JSON.parse("{{ restaurante['address']['coord'] }}")
-            console.log(coord)
-            var map = L.map('map').setView(coord);
+            lat = {{restaurante['address']['coord'][1]}};
+            long= {{restaurante['address']['coord'][0]}};
+            var map = L.map('map').setView([lat, long], 15);
             L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
                 maxZoom: 19,
                 attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
             }).addTo(map);
-            var marker = L.marker(coord).addTo(map);
+            var marker = L.marker([lat, long]).addTo(map);
         </script>
     </div>
 
