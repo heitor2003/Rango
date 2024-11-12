@@ -39,11 +39,16 @@
     </div>
 
     <a href="{{ url_for('reservar', restaurante_id=restaurante['restaurant_id']) }}">
-        <button type="button" class="btn btn-primary">Reservar</button>
+        <button type="button" class="btn btn-success">Reservar</button>
     </a>
 
     <a href="{{ url_for('index')}}">
         <button type="button" class="btn btn-primary">Início</button>
+    </a>
+    <br>
+    <br>
+    <a href="{{ url_for('editar_restaurante', restaurante_id=restaurante['restaurant_id'])}}">
+        <button type="button" class="btn btn-primary">Editar</button>
     </a>
     {% else %}
         <h1>Não foi possível recuperar os dados do restaurante</h1>

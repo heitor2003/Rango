@@ -109,10 +109,31 @@ def reservar(restaurante_id):
     restaurante = restaurantes_col.find_one({'restaurant_id': restaurante_id})
     return render_template('reservar.html', restaurante=restaurante)
 
-@app.route('/restaurante/<restaurante_id>', methods=['GET', 'POST'])
+@app.route('/restaurante/ver/<restaurante_id>', methods=['GET', 'POST'])
 def ver_restaurante(restaurante_id):
     restaurante = restaurantes_col.find_one({"restaurant_id": restaurante_id})
     return render_template("ver_restaurante.html", restaurante=restaurante)
+
+@app.route('/restaurante/editar/<restaurante_id>', methods=['GET', 'POST'])
+def editar_restaurante(restaurante_id):
+    if request.method == 'POST':
+        restaurantes_col.update_one(
+            {"restaurant_id": restaurante_id},
+            {
+                "$set": {
+                    "name": request.form['name'],
+                    "address.building": request.form['building'],
+                    "address.street": request.form['street'],
+                    "address.zipcode": request.form['zipcode'],
+                    "borough": request.form['borough'],
+                    "cuisine": request.form['cuisine']
+                }
+            }
+        )
+        return redirect(url_for("ver_restaurante", restaurante_id=restaurante_id))
+
+    restaurante = restaurantes_col.find_one({"restaurant_id": restaurante_id})
+    return render_template("editar_restaurante.html", restaurante=restaurante)
 
 @app.route('/confirmacao')
 def confirmacao():
