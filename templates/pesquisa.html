@@ -1,39 +1,157 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-br">
 <head>
     <meta charset="UTF-8">
-    <title>Pesquisa de Restaurantes</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Página Inicial - Cliente</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet" integrity="sha384-k6RqeWeci5ZR/Lv4MR0sA0FfDOM4s0T+7rTn61s5ZeHhvX0R5+8nbTov4D7XrE45" crossorigin="anonymous">
+    <style>
+        /* Sidebar Styles */
+        .sidebar {
+            height: 100vh;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 60px;
+            background-color: #343a40;
+            padding-top: 20px;
+            transition: width 0.3s;
+        }
+
+        .sidebar.expanded {
+            width: 250px;
+        }
+
+        .sidebar a {
+            display: flex;
+            align-items: center;
+            padding: 10px 20px;
+            text-decoration: none;
+            color: #fff;
+            font-size: 16px;
+        }
+
+        .sidebar a:hover {
+            background-color: #495057;
+        }
+
+        .sidebar .toggle-btn {
+            color: #fff;
+            text-align: center;
+            cursor: pointer;
+        }
+
+        .content {
+            margin-left: 60px;
+            padding: 20px;
+            transition: margin-left 0.3s;
+        }
+
+        .content.expanded {
+            margin-left: 250px;
+        }
+
+        .active-link {
+            background-color: #495057;
+        }
+
+        /* Pagination Styling */
+        .pagination .page-item.active .page-link {
+            background-color: #343a40;
+            border-color: #343a40;
+        }
+    </style>
 </head>
 <body>
-    <h1>Pesquisar Restaurantes</h1>
-    <form method="POST">
-        Nome do Restaurante: <input type="text" name="nome"><br>
-        Tipo de Cozinha: 
-        <select name="tipo_cozinha">
-            <option value="">Selecione</option>
-            <option value="Italian">Italiana</option>
-            <option value="American">Americana</option>
-            <option value="Bakery">Padaria</option>
-            <option value="Chinese">Chinesa</option>
-            <!-- Adicione mais tipos de cozinha aqui -->
-        </select><br>
-        Latitude: <input type="text" name="latitude"><br>
-        Longitude: <input type="text" name="longitude"><br>
-        <input type="submit" value="Buscar">
-    </form>
+    <!-- Sidebar -->
+    <div class="sidebar" id="sidebar">
+        <div class="toggle-btn" onclick="toggleSidebar()">☰</div>
+        <div id="sidebar-links" class="d-none">
+            <a href="/cliente/editar"><i class="fas fa-edit me-2"></i> Editar Informações</a>
+            <a href="/reservas_feitas"><i class="fas fa-edit me-2"></i>Reservas feitas</a>
+            <a href="{{ url_for('logout') }}"><i class="fas fa-sign-out-alt me-2"></i> Sair</a>
+        </div>
+    </div>
 
-    <h2>Resultados</h2>
-    <ul>
-        {% for restaurante in restaurantes %}
-            <li>
-                <strong>{{ restaurante['name'] }}</strong><br>
-                Tipo de Cozinha: {{ restaurante['cuisine'] }}<br>
-                Localização: {{ restaurante['address']['street'] }}, {{ restaurante['borough'] }}<br>
-                <hr>
-            </li>
-        {% endfor %}
-    </ul>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+    <!-- Main Content -->
+    <div class="content" id="content">
+        <h1>Pesquisar Restaurantes</h1>
+        <form method="POST" class="mb-4">
+            <div class="mb-3">
+                <label for="nome" class="form-label">Nome do Restaurante:</label>
+                <input type="text" id="nome" name="nome" class="form-control">
+            </div>
+            <div class="mb-3">
+                <label for="tipo_cozinha" class="form-label">Tipo de Cozinha:</label>
+                <select id="tipo_cozinha" name="tipo_cozinha" class="form-control">
+                    <option value="">Selecione</option>
+                    <option value="Italian">Italiana</option>
+                    <option value="American">Americana</option>
+                    <option value="Bakery">Padaria</option>
+                    <option value="Chinese">Chinesa</option>
+                </select>
+            </div>
+            <div class="mb-3">
+                <label for="nota" class="form-label">Nota (mínima):</label>
+                <input type="number" id="nota" name="nota" class="form-control" step="0.1" min="0" max="10">
+            </div>
+            <div class="mb-3">
+                <label for="bairro" class="form-label">Bairro:</label>
+                <input type="text" id="bairro" name="bairro" class="form-control">
+            </div>
+            <button type="submit" class="btn btn-primary">Buscar</button>
+        </form>
+
+        {% if restaurantes %}
+            <h2>Resultados</h2>
+            <ul class="list-group">
+                {% for restaurante in restaurantes %}
+                    <li class="list-group-item">
+                        <strong>{{ restaurante['name'] }}</strong><br>
+                        Tipo de Cozinha: {{ restaurante['cuisine'] }}<br>
+                        Localização: {{ restaurante['address']['street'] }}, {{ restaurante['borough'] }}<br>
+                        <a href="{{ url_for('reservar', restaurante_id=restaurante['_id']) }}" class="btn btn-success btn-sm mt-2">Reservar</a>
+                    </li>
+                {% endfor %}
+            </ul>
+        {% else %}
+            <p class="text-muted">Nenhum restaurante encontrado.</p>
+        {% endif %}
+
+        <!-- Pagination -->
+        <nav aria-label="Pagination" class="mt-4">
+            <ul class="pagination">
+                {% set total_pages = (total // per_page) + (1 if total % per_page > 0 else 0) %}
+                {% if page > 1 %}
+                    <li class="page-item">
+                        <a class="page-link" href="{{ url_for('pesquisa', page=page-1, nome=nome, tipo_cozinha=tipo_cozinha, nota=nota_minima, bairro=bairro) }}">Anterior</a>
+                    </li>
+                {% endif %}
+                {% for p in range(1, total_pages + 1) %}
+                    <li class="page-item {% if p == page %}active{% endif %}">
+                        <a class="page-link" href="{{ url_for('pesquisa', page=p, nome=nome, tipo_cozinha=tipo_cozinha, nota=nota_minima, bairro=bairro) }}">{{ p }}</a>
+                    </li>
+                {% endfor %}
+                {% if page < total_pages %}
+                    <li class="page-item">
+                        <a class="page-link" href="{{ url_for('pesquisa', page=page+1, nome=nome, tipo_cozinha=tipo_cozinha, nota=nota_minima, bairro=bairro) }}">Próxima</a>
+                    </li>
+                {% endif %}
+            </ul>
+        </nav>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
+    <script>
+        function toggleSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            const content = document.getElementById('content');
+            const links = document.getElementById('sidebar-links');
+            sidebar.classList.toggle('expanded');
+            content.classList.toggle('expanded');
+            links.classList.toggle('d-none');
+        }
+    </script>
 </body>
 </html>

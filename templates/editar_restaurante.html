@@ -50,8 +50,9 @@
                 <!-- Botão de Enviar -->
                 <button type="submit" class="btn btn-primary">Salvar Alterações</button>
             </form>
-            <br>
-            <br>
+            <form action="{{ url_for('excluir_restaurante', restaurante_id=restaurante['restaurant_id']) }}" method="POST" style="margin-top: 10px;">
+                <button type="submit" class="btn btn-danger">Excluir Restaurante</button>
+            </form>
         </div>
     {% else %}
         <h1>Não foi possível recuperar os dados do restaurante</h1>
