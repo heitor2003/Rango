@@ -15,13 +15,13 @@
         <div class="container mt-5">
             <h2>Editar Restaurante</h2>
             <form action="{{ url_for('editar_restaurante', restaurante_id=restaurante['restaurant_id']) }}" method="POST">
-                <!-- Nome do Restaurante -->
+                
                 <div class="mb-3">
                     <label for="name" class="form-label">Nome do Restaurante</label>
                     <input type="text" class="form-control" id="name" name="name" value="{{ restaurante['name'] }}" required>
                 </div>
 
-                <!-- Endereço -->
+                
                 <div class="mb-3">
                     <label for="building" class="form-label">Prédio</label>
                     <input type="text" class="form-control" id="building" name="building" value="{{ restaurante['address']['building'] }}" required>
@@ -35,19 +35,19 @@
                     <input type="text" class="form-control" id="zipcode" name="zipcode" value="{{ restaurante['address']['zipcode'] }}" required>
                 </div>
 
-                <!-- Bairro -->
+                
                 <div class="mb-3">
                     <label for="borough" class="form-label">Bairro</label>
                     <input type="text" class="form-control" id="borough" name="borough" value="{{ restaurante['borough'] }}" required>
                 </div>
 
-                <!-- Tipo de Culinária -->
+                
                 <div class="mb-3">
                     <label for="cuisine" class="form-label">Tipo de Culinária</label>
                     <input type="text" class="form-control" id="cuisine" name="cuisine" value="{{ restaurante['cuisine'] }}" required>
                 </div>
 
-                <!-- Botão de Enviar -->
+            
                 <button type="submit" class="btn btn-primary">Salvar Alterações</button>
             </form>
             <form action="{{ url_for('excluir_restaurante', restaurante_id=restaurante['restaurant_id']) }}" method="POST" style="margin-top: 10px;">
