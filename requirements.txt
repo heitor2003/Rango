@@ -51,7 +51,6 @@ coloredlogs==15.0.1
 comm==0.2.2
 constructs==10.3.0
 cryptography==3.4.8
-cupshelpers==1.0
 cycler==0.11.0
 cymem==2.0.8
 dataclasses-json==0.6.7
