@@ -49,7 +49,6 @@ click==8.1.7
 colorama==0.4.6
 coloredlogs==15.0.1
 comm==0.2.2
-command-not-found==0.3
 constructs==10.3.0
 cryptography==3.4.8
 cupshelpers==1.0
